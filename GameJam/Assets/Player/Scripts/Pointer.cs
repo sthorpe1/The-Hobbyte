@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Pointer : MonoBehaviour {
 
-    public int range;
-    public Camera cam;
     public GameObject bulletParent;
+    public Transform bulletSpawn;
+    public float bulletTimer;
+    public float bulletSpeed;
 
 	// Use this for initialization
 	void Start () {
@@ -15,13 +16,20 @@ public class Pointer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Ray ray = new Ray(cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.0f)), cam.transform.forward);
-        RaycastHit hit;
-        Debug.DrawRay(ray.origin, ray.direction * range, Color.green);
-
-        if (Physics.Raycast(ray, out hit, range))
+        
+        if(Input.GetMouseButtonDown(0))
         {
-            
+            Shoot();
         }
+        
+    }
+
+    public void Shoot()
+    {
+        GameObject bullet = Instantiate(bulletParent, bulletSpawn.position, bulletSpawn.rotation);
+        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * bulletSpeed;
+
+        Destroy(bullet, bulletTimer);
+
     }
 }
